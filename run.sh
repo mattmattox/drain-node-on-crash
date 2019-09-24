@@ -43,7 +43,7 @@ do
 			else
 				if cat ~/drained_nodes | grep -x $node
 				then
-					echo "$node is ready drained, skipping..."
+					echo "$node is already drained, skipping..."
 				else
 					echo "$node in Not ready, rechecking..."
 					count=0
