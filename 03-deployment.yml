@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: drain-node-on-crash
+  namespace: "kube-system"
+  labels:
+    app: drain-node-on-crash
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: drain-node-on-crash
+  template:
+    metadata:
+      labels:
+        app: drain-node-on-crash
+      annotations:
+    spec:
+      serviceAccountName: drain-node-on-crash
+      containers:
+        - name: drain
+          image: cube8021/drain-node-on-crash:v0.15
+          env:
+            - name: NODE_TIMEOUT
+              value: "30"
+            - name: AUTO_UNCORDON
+              value: "true"
+        - name: drain-node-on-crash
+          image: "k8s.gcr.io/leader-elector:0.5"
+          args:
+          - --election=drain-node-on-crash
+          - --http=0.0.0.0:4040
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 4040

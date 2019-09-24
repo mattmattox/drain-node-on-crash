@@ -1,24 +1,20 @@
-FROM alpine:3.8
+FROM ubuntu:18.04
 
-# Install kubectl
-# Note: Latest version may be found on:
-# https://aur.archlinux.org/packages/kubectl-bin/
-ADD https://storage.googleapis.com/kubernetes-release/release/v1.6.4/bin/linux/amd64/kubectl /usr/local/bin/kubectl
+MAINTAINER matthew.mattox@rancher.com
 
-ENV HOME=/config
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN set -x && \
-    apk add --no-cache curl ca-certificates && \
-    chmod +x /usr/local/bin/kubectl && \
-    \
-    # Create non-root user (with a randomly chosen UID/GUI).
-    adduser kubectl -Du 2342 -h /config && \
-    \
-    # Basic check it works.
-    kubectl version --client
+RUN apt-get update && apt-get install -yq --no-install-recommends \
+    apt-utils \
+    curl \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-USER kubectl
+## Install kubectl
+ADD kubectl /usr/local/bin/kubectl
+RUN chmod +x /usr/local/bin/kubectl
 
-ADD run.sh /bin/run.sh
+## Setup run script
+WORKDIR /root
+ADD run.sh /root/run.sh
 
-ENTRYPOINT ["/bin/run.sh"]
+CMD /root/run.sh
