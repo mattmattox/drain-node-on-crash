@@ -20,10 +20,10 @@ spec:
       serviceAccountName: drain-node-on-crash
       containers:
         - name: drain
-          image: cube8021/drain-node-on-crash:v0.15
+          image: cube8021/drain-node-on-crash:v1.0
           env:
             - name: NODE_TIMEOUT
-              value: "30"
+              value: "360"
             - name: AUTO_UNCORDON
               value: "true"
         - name: drain-node-on-crash

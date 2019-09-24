@@ -25,7 +25,7 @@ do
 			echo "Checking $node"
 			current_status="$(kubectl get --no-headers $node | awk '{print $2}')"
 			##echo "Current node status: $current_status"
-			if [[ "$current_status" == "Ready" ]]
+			if [[ "$current_status" == "Ready" ]] || [[ "$current_status" == "Ready,SchedulingDisabled" ]]
 			then
 				echo "$node is ready"
 				if cat ~/drained_nodes | grep -x $node
@@ -50,7 +50,7 @@ do
 					while true
 					do
 						current_status="$(kubectl get --no-headers $node | awk '{print $2}')"
-						if [[ ! "$current_status" == "Ready" ]]
+						if [[ ! "$current_status" == "Ready" ]] || [[ "$current_status" == "Ready,SchedulingDisabled" ]]
 						then
 							echo "Sleeping for $count seconds"
 							sleep 1

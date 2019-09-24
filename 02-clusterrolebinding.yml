@@ -7,9 +7,58 @@ metadata:
   labels:
     app: drain-node-on-crash
 rules:
-  - apiGroups: [""]
-    resources: ["endpoints", "nodes", "pods", "daemonsets"]
-    verbs: ["*"]
+  - apiGroups:
+    - ""
+    resources:
+    - pods/eviction
+    verbs:
+    - create
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - list
+  - apiGroups:
+    - ""
+    resources: 
+    - endpoints
+    verbs:
+    - get
+    - list
+    - watch
+    - update
+    - create
+    - patch
+    - delete
+  - apiGroups:
+    - ""
+    resources:
+    - nodes
+    verbs:
+    - get
+    - list
+    - watch
+    - update
+    - create
+    - patch
+    - delete
+  - apiGroups:
+    - apps
+    resources:
+    - statefulsets
+    verbs:
+    - get
+    - list
+  - apiGroups:
+    - extensions
+    - ""
+    resources:
+    - daemonsets
+    - replicasets
+    verbs:
+    - get
+    - list
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
