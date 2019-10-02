@@ -16,6 +16,7 @@ rules:
     - pods
     - statefulsets
     - nodes
+    - deployments
     verbs:
     - get
     - list
