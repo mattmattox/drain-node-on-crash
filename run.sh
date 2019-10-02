@@ -77,7 +77,7 @@ do
 							if [[ "$REMOVE_PODS" == "true" ]]
 							then
 								echo "Getting all pods on node..."
-								$node_short="$(echo $node | awk -F '/' '{print $2}')"
+								node_short="$(echo $node | awk -F '/' '{print $2}')"
 								kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName="$node_short" --no-headers | awk '{print $1 "," $2}' > /tmp/pods.csv
 								while IFS=, read -r namespace podname
 								do
