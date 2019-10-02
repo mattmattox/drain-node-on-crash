@@ -74,8 +74,8 @@ do
 							echo "Starting drain of node..."
 							kubectl drain $node --ignore-daemonsets --force
 							echo $node >> ~/drained_nodes
-							echo "Sleeping for 15 seconds..."
-							sleep 15
+							echo "Sleeping for 60 seconds..."
+							sleep 60
 							if [[ "$REMOVE_PODS" == "true" ]]
 							then
 								echo "Getting all pods on node..."
@@ -84,7 +84,16 @@ do
 								while IFS=, read -r namespace podname
 								do
 									echo "Removing $podname from $namespace"
-									kubectl delete pods "$podname" -n "$namespace" --grace-period=0 --force
+									podcount=0
+									while ! kubectl delete pods "$podname" -n "$namespace" --grace-period=0 --force
+									do
+										sleep 1
+										podcount=$((podcount+1))
+										if [ $podcount -gt 60 ]
+										then
+											break
+										fi
+									done
 								done < /tmp/pods.csv
 							fi
 							break
