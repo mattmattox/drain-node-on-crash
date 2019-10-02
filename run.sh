@@ -74,6 +74,8 @@ do
 							echo "Starting drain of node..."
 							kubectl drain $node --ignore-daemonsets --force
 							echo $node >> ~/drained_nodes
+							echo "Sleeping for 15 seconds..."
+							sleep 15
 							if [[ "$REMOVE_PODS" == "true" ]]
 							then
 								echo "Getting all pods on node..."
