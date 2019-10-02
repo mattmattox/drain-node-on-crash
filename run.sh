@@ -12,6 +12,13 @@ then
 fi
 echo "Auto uncordon node on recovery is $AUTO_UNCORDON"
 
+if [[ -z $REMOVE_PODS ]]
+then
+        REMOVE_PODS=true
+fi
+echo "Remove all pods from drained node is $REMOVE_PODS"
+
+
 touch ~/drained_nodes
 
 while true
@@ -67,6 +74,17 @@ do
 							echo "Starting drain of node..."
 							kubectl drain $node --ignore-daemonsets --force
 							echo $node >> ~/drained_nodes
+							if [[ "$REMOVE_PODS" == "true" ]]
+							then
+								echo "Getting all pods on node..."
+								$node_short="$(echo $node | awk -F '/' '{print $2}')"
+								kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName="$node_short" --no-headers | awk '{print $1 "," $2}' > /tmp/pods.csv
+								while IFS=, read -r namespace podname
+								do
+									echo "Removing $podname from $namespace"
+									kubectl delete pods "$podname" -n "$namespace" --grace-period=0 --force
+								done < /tmp/pods.csv
+							fi
 							break
 						fi
 					done
