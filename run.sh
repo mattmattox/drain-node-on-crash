@@ -18,6 +18,10 @@ then
 fi
 echo "Remove all pods from drained node is $REMOVE_PODS"
 
+if [[ -z $CATTLE_CLUSTER_AGENT ]]
+then
+        CATTLE_CLUSTER_AGENT=true
+fi
 
 touch ~/drained_nodes
 
