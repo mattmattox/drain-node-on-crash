@@ -96,6 +96,29 @@ do
 									done
 								done < /tmp/pods.csv
 							fi
+							if [[ "$CATTLE_CLUSTER_AGENT" == "true" ]]
+							then
+								echo "Checking if cattle-cluster-agent is already running..."
+								if [[ ! "$(kubectl get pods -n cattle-system | grep ^'cattle-cluster-agent-' | awk '{print $3}')" == "Running" ]]
+								then
+									echo "Scaling up to force pod to new node..."
+									kubectl scale --replicas=2 deployment/cattle-cluster-agent -n cattle-system
+									cattlecount=0
+									while ! kubectl get pods -n cattle-system | grep ^'cattle-cluster-agent-' | awk '{print $3}' | grep "Running"
+									do
+										sleep 1
+                                                                                cattlecount=$((cattlecount+1))
+                                                                                if [ $cattlecount -gt 60 ]
+                                                                                then
+                                                                                        break
+                                                                                fi
+									done
+									echo "Scaling back down to 1..."
+									kubectl scale --replicas=1 deployment/cattle-cluster-agent -n cattle-system
+								else
+									echo "cattle-cluster-agent is alreayd running..."
+								fi
+							fi
 							break
 						fi
 					done
