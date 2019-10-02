@@ -10,53 +10,12 @@ rules:
   - apiGroups:
     - ""
     resources:
-    - pods/eviction
-    verbs:
-    - create
-  - apiGroups:
-    - ""
-    resources:
-    - pods
-    verbs:
-    - list
-  - apiGroups:
-    - ""
-    resources: 
     - endpoints
-    verbs:
-    - get
-    - list
-    - watch
-    - update
-    - create
-    - patch
-    - delete
-  - apiGroups:
-    - ""
-    resources:
-    - nodes
-    verbs:
-    - get
-    - list
-    - watch
-    - update
-    - create
-    - patch
-    - delete
-  - apiGroups:
-    - apps
-    resources:
-    - statefulsets
-    verbs:
-    - get
-    - list
-  - apiGroups:
-    - extensions
-    - apps
-    - ""
-    resources:
     - daemonsets
     - replicasets
+    - pods
+    - statefulsets
+    - nodes
     verbs:
     - get
     - list
