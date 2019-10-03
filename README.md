@@ -14,3 +14,5 @@ NODE_TIMEOUT = 360  (seconds)
 AUTO_UNCORDON = true (This setting will automatically uncordon a node that was drained by the script. NOTE: Nodes that have cordon outside this app will not be changed.)
 
 REMOVE_PODS = true (This setting will automatically delete all pods from the node after draining.)
+
+CATTLE_CLUSTER_AGENT = true (This setting will apply a fix for cattle-cluster-agent.)
