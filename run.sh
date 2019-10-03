@@ -76,7 +76,7 @@ do
 						then
 							echo "$node has been down for greater than 5Mins, assuming node is down for good."
 							echo "Starting drain of node..."
-							kubectl drain $node --ignore-daemonsets --force
+							kubectl drain $node --ignore-daemonsets --delete-local-data --force
 							echo $node >> ~/drained_nodes
 							echo "Sleeping for 60 seconds..."
 							sleep 60
