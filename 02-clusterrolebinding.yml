@@ -1,33 +1,5 @@
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRole
-metadata:
-  name: drain-node-on-crash
-  namespace: "kube-system"
-  labels:
-    app: drain-node-on-crash
-rules:
-  - apiGroups:
-    - ""
-    resources:
-    - endpoints
-    - daemonsets
-    - replicasets
-    - pods
-    - statefulsets
-    - nodes
-    - deployments
-    verbs:
-    - get
-    - list
-    - watch
-    - update
-    - create
-    - patch
-    - delete
-
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: drain-node-on-crash
@@ -36,9 +8,13 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
   name: drain-node-on-crash
+  namespace: kube-system
+
 subjects:
   - name: drain-node-on-crash
     namespace: "kube-system"
     kind: ServiceAccount
-
