@@ -13,6 +13,11 @@ rules:
     - ''
     - endpoints
     - nodes
+    - pods
+    - statefulsets
+    - daemonsets
+    - replicasets
+    - deployments
     verbs:
     - ''
     - get
