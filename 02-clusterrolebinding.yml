@@ -9,11 +9,14 @@ metadata:
 rules:
   - apiGroups:
     - ''
+    - apps
+    - extensions
     resources:
     - ''
     - endpoints
     - nodes
     - pods
+    - pods/eviction
     - statefulsets
     - daemonsets
     - replicasets

@@ -20,7 +20,7 @@ spec:
       serviceAccountName: drain-node-on-crash
       containers:
         - name: drain
-          image: cube8021/drain-node-on-crash:v1.4
+          image: cube8021/drain-node-on-crash:v1.6
           env:
             - name: NODE_TIMEOUT
               value: "360"
