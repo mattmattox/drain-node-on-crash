@@ -3,10 +3,19 @@ This app is designed to automatically Drain a node after a crash where the node 
 
 ## Install
 ```
-git clone
+git clone https://github.com/mattmattox/drain-node-on-crash.git
 cd drain-node-on-crash
 kubectl apply -f .
 ```
+
+## Upgrade
+```
+rm -rf drain-node-on-crash
+git clone https://github.com/mattmattox/drain-node-on-crash.git
+cd drain-node-on-crash
+kubectl apply -f .
+```
+
 
 ## Default settings
 NODE_TIMEOUT = 360  (seconds)
