@@ -11,16 +11,28 @@ spec:
   selector:
     matchLabels:
       app: drain-node-on-crash
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: drain-node-on-crash
       annotations:
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - drain-node-on-crash
+            topologyKey: "kubernetes.io/hostname"
       serviceAccountName: drain-node-on-crash
       containers:
         - name: drain
-          image: cube8021/drain-node-on-crash:v1.6
+          image: cube8021/drain-node-on-crash:v1.7
           env:
             - name: NODE_TIMEOUT
               value: "360"

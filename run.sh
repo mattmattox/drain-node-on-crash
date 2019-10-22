@@ -48,6 +48,7 @@ do
 					then
 						echo "uncordon $node"
 						kubectl uncordon $node
+						kubectl patch node $node -p '{"spec":{"unschedulable":false}}'
 					fi
 				fi
 
@@ -76,7 +77,8 @@ do
 						then
 							echo "$node has been down for greater than 5Mins, assuming node is down for good."
 							echo "Starting drain of node..."
-							kubectl drain $node --ignore-daemonsets --delete-local-data --force
+							kubectl drain $node --ignore-daemonsets --delete-local-data --force --grace-period=5 --timeout=60s
+							kubectl patch $node -p '{"spec":{"unschedulable":true}}'
 							echo $node >> ~/drained_nodes
 							echo "Sleeping for 60 seconds..."
 							sleep 60
@@ -106,7 +108,7 @@ do
 								if [[ ! "$(kubectl get pods -n cattle-system | grep ^'cattle-cluster-agent-' | awk '{print $3}')" == "Running" ]]
 								then
 									echo "Scaling up to force pod to new node..."
-									kubectl scale --replicas=2 deployment/cattle-cluster-agent -n cattle-system
+									kubectl scale --replicas=5 deployment/cattle-cluster-agent -n cattle-system
 									cattlecount=0
 									while ! kubectl get pods -n cattle-system | grep ^'cattle-cluster-agent-' | awk '{print $3}' | grep "Running"
 									do
