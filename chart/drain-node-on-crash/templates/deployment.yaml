@@ -1,55 +1,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "drain-node-on-crash.fullname" . }}
+  name: drain-node_manager
   labels:
-    {{- include "drain-node-on-crash.labels" . | nindent 4 }}
+    app: drain-node-on-crash
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "drain-node-on-crash.selectorLabels" . | nindent 6 }}
+      app: drain-node-on-crash
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        {{- include "drain-node-on-crash.selectorLabels" . | nindent 8 }}
+        app: drain-node-on-crash
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "drain-node-on-crash.serviceAccountName" . }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - drain-node-on-crash
+            topologyKey: "kubernetes.io/hostname"
+      serviceAccountName: {{ include ".Values.serviceAccount.Name" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: drain
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.managerImage }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+          env:
+            - name: NODE_TIMEOUT
+              value: "{{ .Values.nodeTimeout }}"
+            - name: AUTO_UNCORDON
+              value: "{{ .Values.autoUncordon }}"
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+        - name: leader
+          image: "{{ .Values.leaderImage }}:{{ .Chart.AppVersion }}"
+          args:
+          - --election=drain-node-on-crash
+          - --http=0.0.0.0:4040
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 4040

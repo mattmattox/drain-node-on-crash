@@ -30,6 +30,16 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH
           }
         }
 
+        stage('Build Docker image and push - Leader') {
+          steps {
+            dir(path: './worker') {
+              sh '''docker pull k8s.gcr.io/leader-elector:0.5
+docker tag k8s.gcr.io/leader-elector:0.5 docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+            }
+
+          }
+        }
+
       }
     }
 

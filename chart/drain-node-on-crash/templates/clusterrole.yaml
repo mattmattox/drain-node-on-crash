@@ -1,11 +1,11 @@
----
+{{- if .Values.serviceAccount.create -}}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: drain-node-on-crash
-  namespace: "kube-system"
+  name: drain-node
+  namespace: {{ include ".Values.Namespace" . }}
   labels:
-    app: drain-node-on-crash
+    app: drain-node
 rules:
   - apiGroups:
     - ''
@@ -31,19 +31,31 @@ rules:
     - patch
     - delete
 
-
----
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: drain-node-on-crash
+  name: drain-node
   labels:
-    app: drain-node-on-crash
+    app: drain-node
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: drain-node-on-crash
+  name: drain-node
 subjects:
-  - name: drain-node-on-crash
-    namespace: "kube-system"
+  - name: drain-node
+    namespace: {{ include ".Values.Namespace" . }}
     kind: ServiceAccount
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: drain-node
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: drain-node
+    namespace: {{ include ".Values.Namespace" . }}
+{{- end -}}

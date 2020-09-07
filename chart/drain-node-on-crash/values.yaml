@@ -20,6 +20,11 @@ imagePullSecrets: []
 # Override rancher image location for Air Gap installs
 managerImage: docker.pkg.github.com/mattmattox/drain-node-on-crash/manager
 workerImage: docker.pkg.github.com/mattmattox/drain-node-on-crash/worker
+leaderImage: docker.pkg.github.com/mattmattox/drain-node-on-crash/leader
+
+# Manager settings
+nodeTimeout: 360
+autoUncordon: true
 
 # Number of Manager replicas.
 replicas: 3
