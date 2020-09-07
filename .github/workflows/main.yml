@@ -1,11 +1,4 @@
-name: Remove package versions
-on: push
-jobs:
-  remove-package-versions:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Remove package versions
-      id: remove-package-versions
-      uses: navikt/remove-package-versions@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+- uses: actions/delete-package-versions@v1
+  with:
+    package-name: 'test-package'
+    num-old-versions-to-delete: 3
