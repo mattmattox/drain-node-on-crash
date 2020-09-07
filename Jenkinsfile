@@ -51,8 +51,8 @@ rm -f drain-node-on-crash-*.tgz
 
 echo "Packing chart using helm..."
 helm package ./drain-node-on-crash/ \\
---app-version=$BRANCH_NAME"-rc"$BUILD_NUMBER" \\
---version=$BRANCH_NAME"-rc"$BUILD_NUMBER"
+--app-version="$BRANCH_NAME"-rc"$BUILD_NUMBER" \\
+--version="$BRANCH_NAME"-rc"$BUILD_NUMBER"
 
 echo "Moving package..."
 mv drain-node-on-crash-*.tgz /opt/charts/'''
