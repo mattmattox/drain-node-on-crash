@@ -8,18 +8,28 @@ pipeline {
       }
     }
 
-    stage('Build Docker images') {
-      steps {
-        dir(path: '/manager') {
-          sh '''SHORT_COMMIT="${GIT_COMMIT[0..7]}"
+    stage('Build manager') {
+      parallel {
+        stage('Build manager') {
+          steps {
+            dir(path: './manager') {
+              sh '''SHORT_COMMIT="${GIT_COMMIT[0..7]}"
 docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:$SHORT_COMMIT . && \\
 docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:$SHORT_COMMIT'''
+            }
+
+          }
         }
 
-        dir(path: './worker') {
-          sh '''SHORT_COMMIT="${GIT_COMMIT[0..7]}"
+        stage('Build worker') {
+          steps {
+            dir(path: './worker') {
+              sh '''SHORT_COMMIT="${GIT_COMMIT[0..7]}"
 docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:$SHORT_COMMIT . && \\
 docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:$SHORT_COMMIT'''
+            }
+
+          }
         }
 
       }
