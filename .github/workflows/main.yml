@@ -1,4 +1,0 @@
-- uses: actions/delete-package-versions@v1
-  with:
-    package-name: 'test-package'
-    num-old-versions-to-delete: 3
