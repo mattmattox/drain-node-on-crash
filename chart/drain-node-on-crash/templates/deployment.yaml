@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: drain-node_manager
+  name: drain-node-manager
   labels:
     app: drain-node-on-crash
 spec:
