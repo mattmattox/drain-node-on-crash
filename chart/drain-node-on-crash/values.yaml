@@ -15,7 +15,7 @@ imagePullPolicy: IfNotPresent
 # Override rancher image location for Air Gap installs
 managerImage: drainnode/manager
 workerImage: drainnode/worker
-leaderImage: k8s.gcr.io/leader-elector
+leaderImage: k8s.gcr.io/leader-elector:0.5
 
 # Manager settings
 nodeTimeout: 360
