@@ -13,7 +13,7 @@ pipeline {
         stage('Build manager') {
           steps {
             dir(path: './manager') {
-              sh '''SHORT_COMMIT="${GIT_COMMIT[0..7]}"
+              sh '''SHORT_COMMIT=`${GIT_REVISION,length=6}`
 docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:$SHORT_COMMIT .
 docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:$SHORT_COMMIT'''
             }
@@ -24,7 +24,7 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:$SHORT_
         stage('Build worker') {
           steps {
             dir(path: './worker') {
-              sh '''SHORT_COMMIT="${GIT_COMMIT[0..7]}"
+              sh '''SHORT_COMMIT=`${GIT_REVISION,length=6}`
 docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:$SHORT_COMMIT .
 docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:$SHORT_COMMIT'''
             }
