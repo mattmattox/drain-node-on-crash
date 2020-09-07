@@ -30,7 +30,7 @@ spec:
                 values:
                 - drain-node-on-crash
             topologyKey: "kubernetes.io/hostname"
-      serviceAccountName: {{ include ".Values.serviceAccount.Name" . }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -38,7 +38,7 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.managerImage }}:{{ .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           env:
             - name: NODE_TIMEOUT
               value: "{{ .Values.nodeTimeout }}"

@@ -13,8 +13,8 @@ pipeline {
         stage('Build Docker image and push - Manager') {
           steps {
             dir(path: './manager') {
-              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+              sh '''docker build -t drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
@@ -23,8 +23,8 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANC
         stage('Build Docker image and push - Worker') {
           steps {
             dir(path: './worker') {
-              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+              sh '''docker build -t drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
@@ -34,7 +34,7 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH
           steps {
             dir(path: './worker') {
               sh '''docker pull k8s.gcr.io/leader-elector:0.5
-docker tag k8s.gcr.io/leader-elector:0.5 docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+docker tag k8s.gcr.io/leader-elector:0.5 drainnode/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }

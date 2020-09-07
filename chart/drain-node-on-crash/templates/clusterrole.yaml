@@ -1,9 +1,9 @@
-{{- if .Values.serviceAccount.create -}}
+{{- if .Values.serviceAccountCreate -}}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: drain-node
-  namespace: {{ include ".Values.Namespace" . }}
+  namespace: {{ .Values.Namespace }}
   labels:
     app: drain-node
 rules:
@@ -43,7 +43,7 @@ roleRef:
   name: drain-node
 subjects:
   - name: drain-node
-    namespace: {{ include ".Values.Namespace" . }}
+    namespace: {{ .Values.Namespace }}
     kind: ServiceAccount
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -56,6 +56,6 @@ roleRef:
   name: cluster-admin
 subjects:
   - kind: ServiceAccount
-    name: drain-node
-    namespace: {{ include ".Values.Namespace" . }}
+    name: {{ .Values.serviceAccountName }}
+    namespace: {{ .Values.Namespace }}
 {{- end -}}
