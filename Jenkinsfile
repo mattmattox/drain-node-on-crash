@@ -55,7 +55,7 @@ helm package ./drain-node-on-crash/ \\
 --version="$BRANCH_NAME"-rc"$BUILD_NUMBER"
 
 echo "Moving package..."
-mv drain-node-on-crash-*.tgz /opt/charts/'''
+mv drain-node-on-crash-*.tgz ~/helm-chart/'''
         }
 
       }
@@ -63,8 +63,11 @@ mv drain-node-on-crash-*.tgz /opt/charts/'''
 
     stage('Publishing') {
       steps {
-        sh '''helm repo index /opt/charts/ --url https://charts.suport.tools
-aws s3 sync --profile wasabi --endpoint-url=https://s3.wasabisys.com /opt/charts/  s3://helm.support.tools/'''
+        sh '''cd ~/helm-chart/
+helm repo index ~/helm-chart/ --url https://mattmattox.github.io/helm-chart/
+git add .
+git commit -m "Jenkins Import"
+git push'''
       }
     }
 
