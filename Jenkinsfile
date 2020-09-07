@@ -8,23 +8,23 @@ pipeline {
       }
     }
 
-    stage('Build manager') {
+    stage('Docker') {
       parallel {
-        stage('Build manager') {
+        stage('Build Docker image and push - Manager') {
           steps {
             dir(path: './manager') {
-              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:$GIT_COMMIT .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:$GIT_COMMIT'''
+              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
         }
 
-        stage('Build worker') {
+        stage('Build Docker image and push - Worker') {
           steps {
             dir(path: './worker') {
-              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:$GIT_COMMIT .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:$GIT_COMMIT'''
+              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }

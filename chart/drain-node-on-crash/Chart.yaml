@@ -1,0 +1,15 @@
+
+apiVersion: v1
+name: drain-node-on-crash
+description: A simple little for fixing kubernetes issues.
+version: PlaceHolder_VERSION
+appVersion: PlaceHolder_APPVERSION
+home: https://Support.Tools
+icon: https://TBD.svg
+keywords:
+  - drain-node-on-crash
+sources:
+  - https://github.com/mattmattox/drain-node-on-crash
+maintainers:
+  - name: Matthew Mattox
+    email: mmattox@support.tools

@@ -1,0 +1,25 @@
+Name: Drain-Node-On-Crash
+Namespace: drain-node
+
+rbac:
+  create: true
+  clusterAdminRole: true
+
+serviceAccount:
+  create: true
+  name: drain-node
+
+# Add debug flag to Manager and worker pods
+debug: false
+
+## Optional array of imagePullSecrets containing private registry credentials
+## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+# - name: secretName
+
+# Override rancher image location for Air Gap installs
+managerImage: docker.pkg.github.com/mattmattox/drain-node-on-crash/manager
+workerImage: docker.pkg.github.com/mattmattox/drain-node-on-crash/worker
+
+# Number of Manager replicas.
+replicas: 3
