@@ -43,5 +43,32 @@ docker tag k8s.gcr.io/leader-elector:0.5 docker.pkg.github.com/mattmattox/drain-
       }
     }
 
+    stage('Packaging') {
+      steps {
+        dir(path: './chart') {
+          sh '''echo "Removing old packages..."
+rm -f drain-node-on-crash-*.tgz
+
+echo "Packing chart using helm..."
+helm package ./drain-node-on-crash/ \\
+--app-version=$BRANCH_NAME"-rc"$BUILD_NUMBER" \\
+--version=$BRANCH_NAME"-rc"$BUILD_NUMBER"
+
+echo "Moving package..."
+mv drain-node-on-crash-*.tgz /opt/charts/'''
+        }
+
+      }
+    }
+
+    stage('Publishing') {
+      steps {
+        dir(path: '/opt/charts/') {
+          sh 'helm repo index . --url https://charts.support.tools'
+        }
+
+      }
+    }
+
   }
 }
