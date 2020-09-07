@@ -1,68 +1,25 @@
-# Default values for drain-node-on-crash.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+Name: Drain-Node-On-Crash
+Namespace: drain-node
 
-replicaCount: 1
-
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+rbac:
+  create: true
+  clusterAdminRole: true
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name:
+  name: drain-node
 
-podSecurityContext: {}
-  # fsGroup: 2000
+# Add debug flag to Manager and worker pods
+debug: false
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+## Optional array of imagePullSecrets containing private registry credentials
+## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+# - name: secretName
 
-service:
-  type: ClusterIP
-  port: 80
+# Override rancher image location for Air Gap installs
+managerImage: docker.pkg.github.com/mattmattox/drain-node-on-crash/manager
+workerImage: docker.pkg.github.com/mattmattox/drain-node-on-crash/worker
 
-ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths: []
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+# Number of Manager replicas.
+replicas: 3

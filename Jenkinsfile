@@ -13,8 +13,8 @@ pipeline {
         stage('Build Docker image and push - Manager') {
           steps {
             dir(path: './manager') {
-              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-"$BUILD_NUMBER" .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-"$BUILD_NUMBER"'''
+              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
@@ -23,8 +23,8 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANC
         stage('Build Docker image and push - Worker') {
           steps {
             dir(path: './worker') {
-              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-"$BUILD_NUMBER" .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-"$BUILD_NUMBER"'''
+              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
