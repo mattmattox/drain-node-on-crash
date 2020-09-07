@@ -63,10 +63,7 @@ mv drain-node-on-crash-*.tgz /opt/charts/'''
 
     stage('Publishing') {
       steps {
-        dir(path: '/opt/charts/') {
-          sh 'helm repo index . --url https://charts.support.tools'
-        }
-
+        sh 'helm repo index /opt/charts/ --url https://charts.suport.tools'
       }
     }
 
