@@ -63,7 +63,8 @@ mv drain-node-on-crash-*.tgz /opt/charts/'''
 
     stage('Publishing') {
       steps {
-        sh 'helm repo index /opt/charts/ --url https://charts.suport.tools'
+        sh '''helm repo index /opt/charts/ --url https://charts.suport.tools
+aws s3 sync --profile wasabi --endpoint-url=https://s3.wasabisys.com /opt/charts/  s3://helm.support.tools/'''
       }
     }
 
