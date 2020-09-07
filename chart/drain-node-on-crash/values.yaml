@@ -13,7 +13,7 @@ imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
 # Override rancher image location for Air Gap installs
-managerImage: docker.io/drainnode/manager
+managerImage: docker.iodrainnode/manager
 workerImage: docker.io/drainnode/worker
 leaderImage: docker.io/drainnode/leader
 
@@ -22,4 +22,4 @@ nodeTimeout: 360
 autoUncordon: true
 
 # Number of Manager replicas.
-replicas: 3
+managerReplicaCount: 3

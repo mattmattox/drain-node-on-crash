@@ -5,7 +5,7 @@ metadata:
   labels:
     app: drain-node-on-crash
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.managerReplicaCount }}
   selector:
     matchLabels:
       app: drain-node-on-crash
