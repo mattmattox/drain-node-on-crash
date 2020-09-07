@@ -13,8 +13,8 @@ imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
 # Override rancher image location for Air Gap installs
-managerImage: docker.iodrainnode/manager
-workerImage: docker.io/drainnode/worker
+managerImage: drainnode/manager
+workerImage: drainnode/worker
 leaderImage: k8s.gcr.io/leader-elector
 
 # Manager settings
