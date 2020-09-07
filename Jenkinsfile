@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Login to Docker repo') {
       steps {
-        sh '''cat ~/GH_TOKEN.txt | docker login docker.pkg.github.com -u mattmattox --password-stdin
+        sh '''cat ~/.GH_TOKEN.txt | docker login docker.pkg.github.com -u mattmattox --password-stdin
 '''
       }
     }
