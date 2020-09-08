@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: drain-node-manager
+  namespace: {{ .Values.Namespace }}
   labels:
     app: drain-node-on-crash
 spec:

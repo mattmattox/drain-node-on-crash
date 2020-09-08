@@ -1,5 +1,5 @@
 Name: Drain-Node-On-Crash
-Namespace: drain-node
+Namespace: drain-node-on-crash
 
 serviceAccountName: drain-node
 
