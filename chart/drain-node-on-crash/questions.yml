@@ -1,0 +1,46 @@
+labels:
+  io.cattle.role: project
+categories:
+  - Monitoring
+namespace: drain-node-on-crash
+questions:
+- variable: defaultImage
+  default: true
+  description: "Use default Docker image"
+  label: Use Default Image
+  type: boolean
+  show_subquestion_if: false
+  group: "Container Images"
+  subquestions:
+  - variable: managerImage
+    default: "docker.io/drainnode/manager"
+    description: "Docker Image Manager"
+    type: string
+    label: Docker Image Manager
+  - variable: workerImage
+    default: "docker.io/drainnode/worker"
+    description: "Docker Image worker"
+    type: string
+    label: Docker Image Worker
+  - variable: leaderImage
+    default: "docker.io/drainnode/leader"
+    description: "Docker Image Leader"
+    type: string
+    label: Docker Image Leader
+- variable: nodeTimeout
+  required: true
+  default: '360'
+  description: "Node timeout in seconds"
+  type: string
+  label: "nodeTimeout"
+- variable: autoUncordon
+  default: true
+  description: "Uncordon after node recovery"
+  label: Auto Uncordon
+  type: boolean
+- variable: managerReplicaCount
+  required: true
+  default: '3'
+  description: "Number of Manager replicas"
+  type: string
+  label: "Replicas"

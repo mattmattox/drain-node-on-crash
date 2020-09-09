@@ -33,8 +33,8 @@ docker push drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
         stage('Build Docker image and push - Leader') {
           steps {
             dir(path: './worker') {
-              sh '''docker pull k8s.gcr.io/leader-elector:0.5
-docker tag k8s.gcr.io/leader-elector:0.5 drainnode/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+              sh '''docker pull fredrikjanssonse/leader-elector:0.6
+docker tag fredrikjanssonse/leader-elector:0.6 drainnode/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
