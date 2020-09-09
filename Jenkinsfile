@@ -13,7 +13,7 @@ pipeline {
         stage('Build Docker image and push - Manager') {
           steps {
             dir(path: './manager') {
-              sh '''if [[ "${params.CutRelease}" == "true" ]]
+              sh '''if [[ ${params.CutRelease} == "true" ]]
 then
   imagetag="$BRANCH_NAME"
 else
