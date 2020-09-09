@@ -1,5 +1,10 @@
 pipeline {
   agent any
+  parameters {
+    booleanParam(name: 'CutRelease',
+    defaultValue: false,
+    description: 'Create Public Release')
+  }
   stages {
     stage('Login to Docker repo') {
       steps {
