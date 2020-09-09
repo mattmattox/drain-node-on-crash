@@ -44,3 +44,16 @@ questions:
   description: "Number of Manager replicas"
   type: string
   label: "Replicas"
+- variable: serviceAccountCreate
+  default: true
+  description: "Uncordon after node recovery"
+  label: Create Service Account
+  type: boolean
+  show_subquestion_if: false
+  group: "Service Account and Permissions"
+  subquestions:
+  - variable: serviceAccountName
+    default: "drain-node-on-crash"
+    description: "Service Account Name"
+    type: string
+    label: Service Account Name
