@@ -1,7 +1,7 @@
 Name: Drain-Node-On-Crash
 Namespace: drain-node-on-crash
 
-serviceAccountName: drain-node
+serviceAccountName: drain-node-on-crash
 
 # Add debug flag to Manager and worker pods
 debug: false
