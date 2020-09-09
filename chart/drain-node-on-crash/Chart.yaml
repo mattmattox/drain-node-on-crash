@@ -5,7 +5,7 @@ description: A simple little for fixing kubernetes issues.
 version: PlaceHolder_VERSION
 appVersion: PlaceHolder_APPVERSION
 home: https://Support.Tools
-icon: https://cdn.support.tools/drain-node.svg
+icon: https://raw.githubusercontent.com/mattmattox/drain-node-on-crash/v1.0/assets/drain-node.svg
 keywords:
   - drain-node-on-crash
 sources:
