@@ -1,10 +1,5 @@
 pipeline {
   agent any
-  parameters {
-    booleanParam(name: 'CutRelease',
-    defaultValue: false,
-    description: 'Create Public Release')
-  }
   stages {
     stage('Login to Docker repo') {
       steps {
@@ -18,8 +13,19 @@ pipeline {
         stage('Build Docker image and push - Manager') {
           steps {
             dir(path: './manager') {
-              sh '''docker build -t drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
-docker push drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+              sh '''if [[ "${params.CutRelease}" == "true" ]]
+then
+  imagetag="$BRANCH_NAME"
+else
+  if [[ "$BRANCH_NAME" == "master" ]]
+  then
+    imagetag="master-b"$BUILD_NUMBER
+  else
+    imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
+  fi
+fi
+docker build -t drainnode/manager:"$imagetag" .
+docker push drainnode/manager:"$imagetag"'''
             }
 
           }
@@ -28,8 +34,19 @@ docker push drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
         stage('Build Docker image and push - Worker') {
           steps {
             dir(path: './worker') {
-              sh '''docker build -t drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
-docker push drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+              sh '''if [[ "${params.CutRelease}" == "true" ]]
+then
+  imagetag="$BRANCH_NAME"
+else
+  if [[ "$BRANCH_NAME" == "master" ]]
+  then
+    imagetag="master-b"$BUILD_NUMBER
+  else
+    imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
+  fi
+fi
+docker build -t drainnode/worker:"$imagetag" .
+docker push drainnode/worker:"$imagetag"'''
             }
 
           }
@@ -38,8 +55,19 @@ docker push drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
         stage('Build Docker image and push - Leader') {
           steps {
             dir(path: './worker') {
-              sh '''docker pull fredrikjanssonse/leader-elector:0.6
-docker tag fredrikjanssonse/leader-elector:0.6 drainnode/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+              sh '''if [[ "${params.CutRelease}" == "true" ]]
+then
+  imagetag="$BRANCH_NAME"
+else
+  if [[ "$BRANCH_NAME" == "master" ]]
+  then
+    imagetag="master-b"$BUILD_NUMBER
+  else
+    imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
+  fi
+fi
+docker pull fredrikjanssonse/leader-elector:0.6
+docker tag fredrikjanssonse/leader-elector:0.6 drainnode/leader:"$imagetag"'''
             }
 
           }
@@ -51,13 +79,25 @@ docker tag fredrikjanssonse/leader-elector:0.6 drainnode/leader:"$BRANCH_NAME"-r
     stage('Packaging') {
       steps {
         dir(path: './chart') {
-          sh '''echo "Removing old packages..."
+          sh '''if [[ "${params.CutRelease}" == "true" ]]
+then
+  imagetag="$BRANCH_NAME"
+else
+  if [[ "$BRANCH_NAME" == "master" ]]
+  then
+    imagetag="master-b"$BUILD_NUMBER
+  else
+    imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
+  fi
+fi
+
+echo "Removing old packages..."
 rm -f drain-node-on-crash-*.tgz
 
 echo "Packing chart using helm..."
 helm package ./drain-node-on-crash/ \\
---app-version="$BRANCH_NAME"-rc"$BUILD_NUMBER" \\
---version="$BRANCH_NAME"-rc"$BUILD_NUMBER"
+--app-version="$imagetag" \\
+--version="$imagetag"
 
 echo "Moving package..."
 mv drain-node-on-crash-*.tgz ~/helm-chart/'''
@@ -76,5 +116,8 @@ git push'''
       }
     }
 
+  }
+  parameters {
+    booleanParam(name: 'CutRelease', defaultValue: false, description: 'Create Public Release')
   }
 }
