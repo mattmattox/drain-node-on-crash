@@ -47,7 +47,7 @@ spec:
               value: "{{ .Values.autoUncordon }}"
           resources:
         - name: leader
-          image: "{{ .Values.leaderImage }}"
+          image: "{{ .Values.leaderImage }}:{{ .Chart.AppVersion }}"
           args:
           - --election=drain-node-on-crash
           - --http=0.0.0.0:4040
