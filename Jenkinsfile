@@ -24,8 +24,8 @@ else
     imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
   fi
 fi
-docker build -t drainnode/manager:"$imagetag" .
-docker push drainnode/manager:"$imagetag"'''
+docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$imagetag" .
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$imagetag"
             }
 
           }
@@ -45,8 +45,8 @@ else
     imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
   fi
 fi
-docker build -t drainnode/worker:"$imagetag" .
-docker push drainnode/worker:"$imagetag"'''
+docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$imagetag" .
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$imagetag"'''
             }
 
           }
@@ -67,7 +67,9 @@ else
   fi
 fi
 docker pull fredrikjanssonse/leader-elector:0.6
-docker tag fredrikjanssonse/leader-elector:0.6 drainnode/leader:"$imagetag"'''
+docker tag fredrikjanssonse/leader-elector:0.6 docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$imagetag" .
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$imagetag"'''
+'''
             }
 
           }

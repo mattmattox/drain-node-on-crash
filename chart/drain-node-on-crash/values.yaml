@@ -14,9 +14,9 @@ imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
 # Override rancher image location for Air Gap installs
-managerImage: drainnode/manager
-workerImage: drainnode/worker
-leaderImage: drainnode/leader
+managerImage: docker.pkg.github.com/mattmattox/drain-node-on-crash/manager
+workerImage: docker.pkg.github.com/mattmattox/drain-node-on-crash//worker
+leaderImage: docker.pkg.github.com/mattmattox/drain-node-on-crash//leader
 
 # Manager settings
 nodeTimeout: 360
