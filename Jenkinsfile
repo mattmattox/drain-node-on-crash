@@ -1,5 +1,10 @@
 pipeline {
   agent any
+  parameters {
+    booleanParam(name: 'CutRelease',
+    defaultValue: false,
+    description: 'Create Public Release')
+  }
   stages {
     stage('Login to Docker repo') {
       steps {
@@ -13,19 +18,8 @@ pipeline {
         stage('Build Docker image and push - Manager') {
           steps {
             dir(path: './manager') {
-              sh '''if [[ ${params.CutRelease} == "true" ]]
-then
-  imagetag="$BRANCH_NAME"
-else
-  if [[ "$BRANCH_NAME" == "master" ]]
-  then
-    imagetag="master-b"$BUILD_NUMBER
-  else
-    imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
-  fi
-fi
-docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$imagetag" .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$imagetag"
+              sh '''docker build -t drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
@@ -34,19 +28,8 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$image
         stage('Build Docker image and push - Worker') {
           steps {
             dir(path: './worker') {
-              sh '''if [[ ${params.CutRelease} == "true" ]]
-then
-  imagetag="$BRANCH_NAME"
-else
-  if [[ "$BRANCH_NAME" == "master" ]]
-  then
-    imagetag="master-b"$BUILD_NUMBER
-  else
-    imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
-  fi
-fi
-docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$imagetag" .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$imagetag"
+              sh '''docker build -t drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
@@ -55,21 +38,8 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$imaget
         stage('Build Docker image and push - Leader') {
           steps {
             dir(path: './worker') {
-              sh '''if [[ "${params.CutRelease}" == "true" ]]
-then
-  imagetag="$BRANCH_NAME"
-else
-  if [[ "$BRANCH_NAME" == "master" ]]
-  then
-    imagetag="master-b"$BUILD_NUMBER
-  else
-    imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
-  fi
-fi
-docker pull fredrikjanssonse/leader-elector:0.6
-docker tag fredrikjanssonse/leader-elector:0.6 docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$imagetag" .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$imagetag"'''
-'''
+              sh '''docker pull fredrikjanssonse/leader-elector:0.6
+docker tag fredrikjanssonse/leader-elector:0.6 drainnode/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
@@ -81,25 +51,13 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$imaget
     stage('Packaging') {
       steps {
         dir(path: './chart') {
-          sh '''if [[ "${params.CutRelease}" == "true" ]]
-then
-  imagetag="$BRANCH_NAME"
-else
-  if [[ "$BRANCH_NAME" == "master" ]]
-  then
-    imagetag="master-b"$BUILD_NUMBER
-  else
-    imagetag="$BRANCH_NAME"-rc"$BUILD_NUMBER"
-  fi
-fi
-
-echo "Removing old packages..."
+          sh '''echo "Removing old packages..."
 rm -f drain-node-on-crash-*.tgz
 
 echo "Packing chart using helm..."
 helm package ./drain-node-on-crash/ \\
---app-version="$imagetag" \\
---version="$imagetag"
+--app-version="$BRANCH_NAME"-rc"$BUILD_NUMBER" \\
+--version="$BRANCH_NAME"-rc"$BUILD_NUMBER"
 
 echo "Moving package..."
 mv drain-node-on-crash-*.tgz ~/helm-chart/'''
@@ -118,8 +76,5 @@ git push'''
       }
     }
 
-  }
-  parameters {
-    booleanParam(name: 'CutRelease', defaultValue: false, description: 'Create Public Release')
   }
 }
