@@ -34,7 +34,8 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH
           steps {
             dir(path: './worker') {
               sh '''docker pull fredrikjanssonse/leader-elector:0.6
-docker tag fredrikjanssonse/leader-elector:0.6 docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+docker tag fredrikjanssonse/leader-elector:0.6 docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
