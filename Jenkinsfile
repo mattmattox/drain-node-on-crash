@@ -34,7 +34,7 @@ docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$image
         stage('Build Docker image and push - Worker') {
           steps {
             dir(path: './worker') {
-              sh '''if [[ "${params.CutRelease}" == "true" ]]
+              sh '''if [[ ${params.CutRelease} == "true" ]]
 then
   imagetag="$BRANCH_NAME"
 else
@@ -46,7 +46,7 @@ else
   fi
 fi
 docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$imagetag" .
-docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$imagetag"'''
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$imagetag"
             }
 
           }
