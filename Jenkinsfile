@@ -1,10 +1,5 @@
 pipeline {
   agent any
-  parameters {
-    booleanParam(name: 'CutRelease',
-    defaultValue: false,
-    description: 'Create Public Release')
-  }
   stages {
     stage('Login to Docker repo') {
       steps {
@@ -18,8 +13,8 @@ pipeline {
         stage('Build Docker image and push - Manager') {
           steps {
             dir(path: './manager') {
-              sh '''docker build -t drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
-docker push drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
@@ -28,8 +23,8 @@ docker push drainnode/manager:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
         stage('Build Docker image and push - Worker') {
           steps {
             dir(path: './worker') {
-              sh '''docker build -t drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
-docker push drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+              sh '''docker build -t docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER" .
+docker push docker.pkg.github.com/mattmattox/drain-node-on-crash/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
@@ -39,7 +34,7 @@ docker push drainnode/worker:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
           steps {
             dir(path: './worker') {
               sh '''docker pull fredrikjanssonse/leader-elector:0.6
-docker tag fredrikjanssonse/leader-elector:0.6 drainnode/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
+docker tag fredrikjanssonse/leader-elector:0.6 docker.pkg.github.com/mattmattox/drain-node-on-crash/leader:"$BRANCH_NAME"-rc"$BUILD_NUMBER"'''
             }
 
           }
@@ -76,5 +71,8 @@ git push'''
       }
     }
 
+  }
+  parameters {
+    booleanParam(name: 'CutRelease', defaultValue: false, description: 'Create Public Release')
   }
 }
